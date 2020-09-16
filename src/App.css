@@ -14,14 +14,20 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #EFF2F5;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   font-size: calc(10px + 2vmin);
   color: white;
+}
+.App-header > * {
+  margin-bottom: 10px;
+}
+
+.App-header.animated {
 }
 
 .App-link {
@@ -35,4 +41,33 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.blue {
+  background-color: blue;
+}
+.pink {
+  background-color: pink;
+}
+.green {
+  background-color: green;
+}
+.card {
+  box-shadow: 0 3px 8px rgba(61,74,84,.1), 0 3px 12px rgba(61,74,84,.06);
+  border-radius: 4px;
+}
+
+.open {
+  width: 500px;
+  height: 600px;
+}
+.compact {
+  width: 500px;
+  height: 100px;
+}
+.hidden {
+  width: 500px;
+  height: 100px;
+  opacity: 0;
 }

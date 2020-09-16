@@ -2,25 +2,68 @@ import { TransformValues } from './computeInverseValues'
 
 const easingFunction = (a: number):number => 1 - Math.pow(1 - a, 3);
 
-export const keyframeBuilder = (from: TransformValues, to: TransformValues): string => {
+export const keyframeBuilder = (from: TransformValues, to: TransformValues, animationName: string): string => {
   const stepKeyStrings:string[] = []
+  const stepKeyStringsInner: string[] = []
+  const stepKeyStringsPrevContent: string[] = []
+  const stepKeyStringsNextContent: string[] = []
+
   for (let i = 0; i < 100; i += 1 ) {
-    let ease = easingFunction(i/100);
+    let step = easingFunction(i/100);
 
-    let scaleX = Math.floor(to.scaleX + (from.scaleX) * ease);
+    let scaleX = from.scaleX + (to.scaleX - from.scaleX) * step;
+    let scaleY = from.scaleY + (to.scaleY - from.scaleY) * step;
 
-    let scaleY = Math.floor(to.scaleY + (from.scaleY) * ease);
-    let translateX = Math.floor(to.translateX + (from.translateX) * ease);
-    let translateY = Math.floor(to.translateY + (from.translateY) * ease);
+    let translateX = from.translateX + (to.translateX - from.translateX) * step;
+    let translateY = from.translateY + (to.translateY - from.translateY) * step;
+
+    let opacity = from.opacity + (to.opacity - from.opacity) * step
 
     stepKeyStrings.push(`
       ${i}% {
-        transform: scale(${scaleX}, ${scaleY}) translate(${translateX}px, ${translateY}px)
+        transform: translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY});
+        opacity: ${opacity};
+      }
+    `)
+
+    stepKeyStringsInner.push(`
+      ${i}% {
+        transform: scale(${1/scaleX}, ${1/scaleY});
+      }
+    `)
+
+    let prevContentOpacity = 1 - 1 * step
+    stepKeyStringsPrevContent.push(`
+      ${i}% {
+        opacity: ${prevContentOpacity};
+      }
+    `)
+
+    let nextContentOpacity = 1 * step
+    stepKeyStringsNextContent.push(`
+      ${i}% {
+        opacity: ${nextContentOpacity};
       }
     `)
   }
-  return `@keyframes animatedBox {
+
+  return `
+  @keyframes ${animationName} {
     ${stepKeyStrings.join('')}
-  }`
+  }
+
+  @keyframes ${animationName}_inner {
+    ${stepKeyStringsInner.join('')}
+  }
+
+  @keyframes ${animationName}_prevContent {
+    ${stepKeyStringsPrevContent.join('')}
+  }
+
+  @keyframes ${animationName}_nextContent {
+    ${stepKeyStringsNextContent.join('')}
+  }
+
+  `
 
 }

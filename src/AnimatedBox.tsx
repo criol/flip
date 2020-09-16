@@ -1,52 +1,63 @@
-import React, { useRef, useLayoutEffect } from 'react'
-import {computeInverseValues} from './computeInverseValues'
-import {keyframeBuilder} from './keyframeBuilder'
-export enum SizeEnum {
-  small = `Small`,
-  big = `Big`
-}
+import React from 'react'
 
-interface AnimatedBoxProps {
-  size: SizeEnum
-}
-const pixelMap: {[key: string]: number} = {
-  [SizeEnum.small]: 10,
-  [SizeEnum.big]: 200,
-}
+export const AnimatedBox = () => <div>lol</div>
+// import React, { useRef, useLayoutEffect, useState, useEffect } from 'react'
+// import {computeInverseValues} from './computeInverseValues'
+// import {keyframeBuilder} from './keyframeBuilder'
 
-export const AnimatedBox: React.FunctionComponent<AnimatedBoxProps> = ({size}: AnimatedBoxProps) => {
-  const pixels = pixelMap[size];
-  const boxRef = useRef<HTMLDivElement>(null)
-  const lastBound = useRef<DOMRect>()
+// interface AnimatedBoxProps {
+//   style: {[key: string]: string},
+//   duration: number,
+//   children: React.ReactNode
+// }
 
-  useLayoutEffect(() => {
-    const boxElement = boxRef.current;
-    const firstBound = boxElement?.getBoundingClientRect()
-    if (lastBound.current) {
-      const inverseValues = computeInverseValues(firstBound, lastBound.current)
-      console.log(keyframeBuilder(
-        inverseValues,
-        {translateX:0, translateY: 0, scaleX:0, scaleY:0}
-      ))
-    }
-    lastBound.current = firstBound;
-  }, [size])
+// const cssAnimationName = `min_sVenja`
+
+// export const AnimatedBox: React.FunctionComponent<AnimatedBoxProps> = ({style, duration, children}) => {
+//   const boxRef = useRef<HTMLDivElement>(null)
+//   const lastBound = useRef<DOMRect>()
+//   const [animationString, setAnimationString] = useState(``)
+//   const countRef = useRef<number>(0)
+//   useEffect(() => {
+//     console.log('effect')
+//   },[JSON.stringify(style), children])
+
+//   useLayoutEffect(() => {
+//     console.log('layout effect')
+//     const boxElement = boxRef.current;
+//     const firstBound = boxElement?.getBoundingClientRect()
+//     if (lastBound.current && lastBound.current !== firstBound) {
+//       const inverseValues = computeInverseValues(firstBound, lastBound.current)
+//       console.log(firstBound, lastBound.current)
+//       setAnimationString(keyframeBuilder(
+//         inverseValues,
+//         {translateX:0, translateY: 0, scaleX:1, scaleY:1},
+//         cssAnimationName + countRef.current
+//       ));
+//     }
+//     lastBound.current = firstBound;
+//     countRef.current += 1;
+//   }, [JSON.stringify(style), children])
 
 
-  return <div style={{
-    width: `300px`,
-    height: `300px`,
-    display: `flex`,
-    justifyContent: size === SizeEnum.small ? 'flex-start': 'flex-end'
-  }}>
-      <div
-        ref={boxRef}
-        style={{
-          width: `${pixels}px`,
-          height: `${pixels}px`,
-          background: `red`,
-        }}>
-          <div>sad</div>
-        </div>
-  </div>
-}
+//   return <>
+//     <style>
+//       {animationString}
+//     </style>
+//     <div
+//       ref={boxRef}
+//       style={{
+//         ...style,
+//         transformOrigin: `top left`,
+//         overflow: `hidden`,
+//         [animationString ? `animation` : ``]: `${cssAnimationName+(countRef.current-1)} linear ${duration}s`
+//       }}>
+//         <div style={{
+//           [animationString ? `animation` : ``]: `${cssAnimationName+(countRef.current-1)}_inner linear ${duration}s`
+//         }}>
+//           {children}
+
+//         </div>
+//       </div>
+//   </>
+// }
